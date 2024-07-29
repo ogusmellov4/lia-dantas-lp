@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <section id="carrouselSection">
+      <button id="leftArrowBtn" class="carrousel-btn">
+        <i class="bx bx-chevron-left"></i>
+      </button>
+      <div class="carrousel-img-container">
+        <div class="img-ref-box">
+          <p id="imgRefText"></p>
+        </div>
+        <img
+          id="img-1"
+          data-image-ref="Toxina Botulínica"
+          src="https://spacosaudelife.com.br/wp-content/uploads/2022/03/pexels-cottonbro-7581589-1-1536x892.jpg"
+          alt=""
+          class="carroussel-img"
+        />
+        <img
+          id="img-2"
+          data-image-ref="Preenchimento"
+          src="https://www.leonardogasbarro.com.br/wp-content/uploads/2019/08/Preenchimento-facial.jpg"
+          alt=""
+          class="carroussel-img"
+        />
+        <img
+          id="img-3"
+          data-image-ref="Liftera"
+          src="https://marinahayashida.com.br/wp-content/uploads/2021/11/liftera-1024x576.webp"
+          alt=""
+          class="carroussel-img"
+        />
+        <img
+          id="img-4"
+          data-image-ref="Bioestimulador de Colágeno"
+          src="https://images.pexels.com/photos/3985311/pexels-photo-3985311.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+          alt=""
+          class="carroussel-img"
+        />
+        <img
+          id="img-5"
+          data-image-ref="Luz Pulsada"
+          src="https://d1xe7tfg0uwul9.cloudfront.net/sbd-portal-2024/wp-content/uploads/2021/10/manicure-mais-segura-5-15.jpg"
+          alt=""
+          class="carroussel-img"
+        />
+        <div id="sliders">
+          <button class="active-box slider-box" id="slider-img-1"></button>
+          <button class="slider-box" id="slider-img-2"></button>
+          <button class="slider-box" id="slider-img-3"></button>
+          <button class="slider-box" id="slider-img-4"></button>
+          <button class="slider-box" id="slider-img-5"></button>
+        </div>
+      </div>
+      <button id="rightArrowBtn" class="carrousel-btn">
+        <i class="bx bx-chevron-right"></i>
+      </button>
+    </section>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const carrouselImages = document.querySelectorAll(".carroussel-img");
+        const sliderButtons = document.querySelectorAll(".slider-box");
+        const leftArrowBtn = document.getElementById("leftArrowBtn");
+        const rightArrowBtn = document.getElementById("rightArrowBtn");
+        const imgRefText = document.getElementById("imgRefText");
+        const imgRefBox = imgRefText.parentElement;
+        let currentIndex = 0;
+        let autoSlideInterval;
+
+        const updateCarrousel = (index) => {
+          carrouselImages.forEach((img, i) => {
+            img.style.display = i === index ? "block" : "none";
+          });
+          sliderButtons.forEach((btn, i) => {
+            btn.classList.toggle("active-box", i === index);
+          });
+          const currentImage = carrouselImages[index];
+          const imageRef = currentImage.dataset.imageRef;
+          if (imageRef) {
+            imgRefText.textContent = imageRef;
+            imgRefBox.style.display = "block";
+          } else {
+            imgRefText.textContent = "";
+            imgRefBox.style.display = "none";
+          }
+        };
+
+        const showNextImage = () => {
+          currentIndex = (currentIndex + 1) % carrouselImages.length;
+          updateCarrousel(currentIndex);
+        };
+
+        const showPreviousImage = () => {
+          currentIndex =
+            (currentIndex - 1 + carrouselImages.length) %
+            carrouselImages.length;
+          updateCarrousel(currentIndex);
+        };
+
+        const startAutoSlide = () => {
+          autoSlideInterval = setInterval(showNextImage, 3000);
+        };
+
+        const stopAutoSlide = () => {
+          clearInterval(autoSlideInterval);
+        };
+
+        sliderButtons.forEach((button, index) => {
+          button.addEventListener("click", () => {
+            currentIndex = index;
+            updateCarrousel(currentIndex);
+            stopAutoSlide();
+            startAutoSlide();
+          });
+        });
+
+        leftArrowBtn.addEventListener("click", () => {
+          showPreviousImage();
+          stopAutoSlide();
+          startAutoSlide();
+        });
+
+        rightArrowBtn.addEventListener("click", () => {
+          showNextImage();
+          stopAutoSlide();
+          startAutoSlide();
+        });
+
+        // Initialize carrousel
+        updateCarrousel(currentIndex);
+        startAutoSlide();
+      });
+    </script>
+  </body>
+</html>
